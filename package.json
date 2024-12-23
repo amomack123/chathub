@@ -9,8 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@langchain/anthropic": "^0.3.11",
+    "@langchain/core": "^0.3.26",
+    "@langchain/openai": "^0.3.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "idb-keyval": "^6.2.1",
     "lucide-react": "^0.469.0",
     "next": "15.1.2",
     "react": "^19.0.0",
