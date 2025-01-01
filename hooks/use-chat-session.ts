@@ -1,5 +1,6 @@
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import { get, set } from 'idb-keyval';
+import { v4 } from 'uuid';
 
 export enum ModelType {
     GPT3 = 'gpt-3',
@@ -84,6 +85,28 @@ export const useChatSession = () => {
         })
         await set("chat-sessions", newSessions)
     }
+
+    const createNewSession =  async() => {
+        const sessions = await getSessions()
+
+        const latestSession = sessions?.[0]
+        if(latestSession?.messages?.length === 0) {
+            return latestSession
+        }
+
+        const newSession: TChatSession= {
+             id: v4(),
+             messages: [],
+             title: "Untitled",
+             createdAt: new Date().toISOString(),
+
+        }
+
+        const newSesssions = [...sessions, newSession]
+        await set("chat-sessions", newSesssions)
+        return newSession
+    };
+
     const updateSession = async(sessionId: string, newSession: Omit<TChatSession, "id">) => {
         const sessions =  await getSessions()
         const newSessions = sessions.map((session: TChatSession) => {
@@ -96,5 +119,5 @@ export const useChatSession = () => {
         })
         await set("chat-sessions", newSessions); 
     }
-    return {getSessions, setSession, getSessionById, removeSessionById, updateSession, addMessageToSession};
+    return {getSessions, setSession, getSessionById, removeSessionById, updateSession, addMessageToSession, createNewSession};
 };
